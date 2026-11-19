@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><style>body{font:11px sans-serif}table{width:100%;border-collapse:collapse;margin-bottom:14px}td,th{border:1px solid #ccc;padding:3px 5px;text-align:left}h3{margin:10px 0 4px}</style></head><body>
+<h2>Laporan Angkringan — {{ $from }} s/d {{ $to }}</h2>
+<h3>Omset</h3><table><tr><th>Periode</th><th>Trx</th><th>Gross</th><th>Diskon</th><th>Pajak</th><th>Net</th></tr>
+@foreach($rev['rows'] as $x)<tr><td>{{ $x->period }}</td><td>{{ $x->trx }}</td><td>{{ number_format($x->gross) }}</td><td>{{ number_format($x->discount) }}</td><td>{{ number_format($x->tax) }}</td><td>{{ number_format($x->net) }}</td></tr>@endforeach
+<tr><th>Total</th><th>{{ $rev['totals']['trx'] }}</th><th>{{ number_format($rev['totals']['gross']) }}</th><th>{{ number_format($rev['totals']['discount']) }}</th><th>{{ number_format($rev['totals']['tax']) }}</th><th>{{ number_format($rev['totals']['net']) }}</th></tr></table>
+<h3>Metode Pembayaran</h3><table>@foreach($rev['methods'] as $m=>$t)<tr><td>{{ strtoupper($m) }}</td><td>{{ number_format($t) }}</td></tr>@endforeach</table>
+<h3>Item Terlaris</h3><table><tr><th>Item</th><th>Qty</th><th>Omset</th></tr>@foreach($top['items'] as $i)<tr><td>{{ $i->name }}</td><td>{{ $i->qty }}</td><td>{{ number_format($i->revenue) }}</td></tr>@endforeach</table>
+<h3>Per Kasir / Shift</h3><table><tr><th>Kasir</th><th>Buka</th><th>Tutup</th><th>Trx</th><th>Omset</th><th>Seharusnya</th><th>Fisik</th><th>Selisih</th></tr>
+@foreach($shifts as $s)<tr><td>{{ $s->cashier }}</td><td>{{ $s->opened_at }}</td><td>{{ $s->closed_at }}</td><td>{{ $s->trx }}</td><td>{{ number_format($s->revenue) }}</td><td>{{ $s->end_cash!==null?number_format($s->end_cash):'-' }}</td><td>{{ $s->actual_cash!==null?number_format($s->actual_cash):'-' }}</td><td>{{ $s->difference!==null?number_format($s->difference):'-' }}</td></tr>@endforeach</table></body></html>
